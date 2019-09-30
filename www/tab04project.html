@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<HTML>
+
+<HEAD>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- A biblioteca bundle já contem os arquivos JS do Bootstrap, Popper, e jQuery.
+    <script src="js/bootstrap.bundle.js"></script>-->
+    <title>FTT EC LP2 N1!!</title>
+    <LINK REL="stylesheet" HREF="css/bootstrap.css" />
+    <STYLE>
+        .center-txt {
+            text-align: center;
+            color: black;
+            width: 90px;
+            padding: 4px;
+            margin:0;
+            border:0;
+        }
+        .button-selected {
+            background-color: #343a40;
+            color: white;
+            border-radius: 15px;
+        }       
+        .width-button-bar {
+            text-align: center;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin-right: 0;
+            margin-left: 0;
+            
+        }
+        .bottom-button-bar {
+            margin:0;
+            padding:0;
+            border:0;
+            width: 100%;
+        }
+        .icon-font {
+            font-size: 40px;   
+        }
+        main {
+            padding-top: 56px;
+            padding-bottom: 50px;
+        }
+        
+        h1{
+            font-size: 32px;
+            margin: 5px;
+        }
+        
+        h2{
+            font-size: 28px;
+            text-align: left;
+            display: inline;
+            float: left;
+        }
+        
+        h3{
+            color: palevioletred;
+            font-size: 16px;
+            display: block;
+            float: left;
+            text-align: left;
+            margin-top: 3px;
+            margin-bottom: -35px;
+        }
+        
+        
+        h4{
+            display: inline;
+            float: left;
+            text-align: left;
+            margin-left: -355px;
+            color: dimgray;
+            font-size: 16px;
+            margin-top: 23px;
+        }
+
+        h5{
+            display: inline;
+            float: left;
+            text-align: left;
+            color: dimgray;
+
+            font-size: 16px;
+
+        }
+        
+        nImg {
+            display: inline;
+            float: right;
+        }
+        
+        .card-header {
+            background-color: palevioletred;
+            margin-top: 18px;
+            width: 100%;
+        }
+
+        
+        form {
+            padding: 0;
+            border: 0;
+            margin: 0;
+        }
+        
+        
+    </STYLE>
+    
+    <SCRIPT>
+        <!-- Obtenha sua própria chave (key), vou cancelar esta... --> 
+        var key = 'a471bfae6bea4870828911cc205e47e9'; //Conseguir uma chave no site da API...
+        var newsSearch = document.getElementById("selectpicker");
+        var newsSearchText;
+        var url;
+        
+        
+        
+        //Cria CARDS com os dados do JSON
+        //Referência: https://getbootstrap.com/docs/4.3/components/card/
+        function createNewsCards(nData) {
+
+            var h1 = document.createElement("H1");
+            
+            h1.innerText = "Séries e Programas de TV lançados hoje pelo mundo";
+            
+            aluno.appendChild(h1);
+            
+            console.log(nData);
+            for (i in nData) {
+
+
+                console.log(nData[i]);
+                var a = document.createElement("ARTICLE"); // Create a <ARTICLE> element
+                a.setAttribute("class", "card");
+
+                var x = document.createElement("div");
+                x.setAttribute("class", "row");
+                
+                var y = document.createElement("div");
+                y.setAttribute("classe", "col-sm-6");
+                
+                var z = document.createElement("div");
+                z.setAttribute("class", "col-sm-6");
+                
+                var h2 = document.createElement("H2"); // nome da serie
+                h2.setAttribute("class", "card-header");
+                
+                var nImg = document.createElement("IMG"); // Create a <H2> element
+                nImg.setAttribute("class", "card-body");
+                
+                var h3 = document.createElement("H3"); //nome do episódio
+                h3.setAttribute("class", "card-body");
+                
+                var h4 = document.createElement("H4"); // infos do episódio
+                h4.setAttribute("class", "card-body");
+
+                var h5 = document.createElement("H5"); //infos do episodio
+                h5.setAttribute("class", "card-body");
+                
+
+                
+                //nImg.style.width = "100px"; //The full width is 400px, 10px of border left and right
+                h2.innerText = nData[i].show.name; // nome da serie
+                nImg.src = nData[i].show.image.original;
+                nImg.style.width = "200px";
+               // nImg.display = inline;
+                h3.innerText = "Temporada: " + nData[i].season + " - Episódio: " + nData[i].number + ": " + nData[i].name; 
+                h4.innerText = "Canal: " + nData[i].show.network.name;
+                //desc.innerText = "Data de exibição: " + nData[i].airdate + " Hora: " + nData[i].airdate;
+                h5.innerText = "Data de exibição: " + nData[i].airdate + " Hora: " + nData[i].airtime;
+                
+                
+                a.appendChild(x);
+                x.appendChild(y);
+                x.appendChild(z);
+                    
+                
+                z.appendChild(h2); 
+                y.appendChild(nImg);
+                z.appendChild(h3); 
+                z.appendChild(h5);
+                z.appendChild(h4);                 
+
+                document.getElementById("aluno").appendChild(a);
+
+                }
+                 
+        }
+                 //for
+            
+            // remove imagens quebradas, deixa o card sem imagem
+            document.querySelectorAll('img').forEach(function(img){
+  	             img.onerror = function(){ this.style.display='none'; };
+            });
+        
+         //createNewsCards
+
+        //Busca os dados da API (Serviço REST/JSON - AJAX)
+        function reloadPage() {
+
+            url = 'http://api.tvmaze.com/schedule';
+            document.getElementById("aluno").innerHTML = "";
+            console.log(url);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.onload = function() {
+
+                if (xhr.status >= 200 && xhr.status < 300) {
+
+                    console.log('success!', JSON.parse(xhr.responseText));
+                    var newsData = JSON.parse(xhr.responseText);
+                    createNewsCards(newsData);
+
+                } else {
+                    
+                    let error_message= "Ops! Erro!!!<br>" + xhr.statusText;
+                    console.log(error_message);
+                    document.getElementById("aluno").innerHTML = error_message;
+                } //if
+
+                console.log('Here we are...');
+            };
+
+            xhr.open('GET', url);
+            xhr.send();
+            
+        } //reloadPage
+
+
+
+    </SCRIPT>
+</HEAD>
+
+<BODY onload="reloadPage();" lang="pt-br">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="navbar-brand" href="#">&#x1F981; FTT EC LP2 N1!!!</a>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <div class="navbar-nav float-right text-right pr-3">
+                <a class="nav-item nav-link" href="index.html">Splash</a>
+                <a class="nav-item nav-link" href="http://www.fundacaosalvadorarena.org.br/" target="newpage">CEFSA</a>
+                <a class="nav-item nav-link" href="about.html">Sobre</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" id="aluno">
+        <hr>
+        <h1><span class="badge badge-success">Projeto do aluno!!</span></h1>
+        <p><a href="https://github.com/public-apis/public-apis" target="_apis">Lista de APIs públicas</a></p>
+        
+        
+        
+        
+        
+    </main>
+
+    <nav class="navbar fixed-bottom navbar-light bg-light width-button-bar">
+        <div class="row w-100 bottom-button-bar">
+            <div class="col-sm center-txt"><b onclick='window.location="tab01news.html"'>News<br><span class="icon-font">&#x1f4f0;</span></b>
+            </div>
+            <div class="col-sm center-txt"><b onclick='window.location="tab02map.html"'>Map<br><span class="icon-font">&#x1f4cc;</span></b>
+            </div>
+            <div class="col-sm center-txt"><b onclick='window.location="tab03todo.html"'>Todo<br><span class="icon-font">&#x1F4DD;</span></b>
+            </div>
+            <div class="col-sm center-txt button-selected"><b onclick='window.location="tab04project.html"'>TV<br><span class="icon-font">&#x1F981</span></b>
+            </div>
+        </div>
+    </nav>
+</BODY>
+<!-- carga de scripts do Bootstrap, JQuery, Popper -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+</HTML>
